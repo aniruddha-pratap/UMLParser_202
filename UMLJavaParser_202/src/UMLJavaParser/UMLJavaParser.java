@@ -44,7 +44,7 @@ public class UMLJavaParser {
 		}
 		else
 		{
-			System.out.println("Provide all required arguments.");
+			System.out.println("Arguments missing");
 		}
 	
 	}
