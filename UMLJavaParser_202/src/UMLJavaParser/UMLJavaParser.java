@@ -35,6 +35,12 @@ public class UMLJavaParser {
 	private static ArrayList<String>  classConsrtuctorParameters= new ArrayList<String>();
 	public static String classes = "";
 	public static String url = "";
+	private HashMap<String,List<ClassOrInterfaceType>> mappingInterfaces = new HashMap<String,List<ClassOrInterfaceType>>();
+	private HashMap<String,List<ClassOrInterfaceType>> mappingParentClass = new HashMap<String,List<ClassOrInterfaceType>>();
+	private String[] dataTypes = {"byte","short","int","long","float","double","boolean","char",
+			"Byte","Short","Integer","Long","Float","Double","Boolean","Char"};
+	
+	
 	public static void main(String[] args) throws URISyntaxException
 	{
 		if(args.length == 2)
