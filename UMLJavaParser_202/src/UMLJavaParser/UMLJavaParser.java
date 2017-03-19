@@ -1,5 +1,6 @@
 package UMLJavaParser;
 import java.io.File;
+import java.net.URISyntaxException;
 import java.util.*;
 
 import com.github.javaparser.JavaParser;
@@ -22,14 +23,29 @@ import com.github.javaparser.ast.type.VoidType;
 
 public class UMLJavaParser {
 	
-	private String inputFile = null;
-	private String localFilePath = null;
-	private File localFolder = null;
-	private File[] listOfFiles = null;
-	private ArrayList<String> implementedInterfaces = new ArrayList<String>();
-	private ArrayList<String> classVariables = new ArrayList<String>();
-	private ArrayList<String> classMethods = new ArrayList<String>();
-	private ArrayList<String>  classMethodParams= new ArrayList<String>();
+	private static String inputFile = null;
+	private static String localFilePath = null;
+	private static File localFolder = null;
+	private static File[] fileCount = null;
+	private static ArrayList<String> implementedInterfaces = new ArrayList<String>();
+	private static ArrayList<String> classVariables = new ArrayList<String>();
+	private static ArrayList<String> classMethods = new ArrayList<String>();
+	private static ArrayList<String>  classMethodParams= new ArrayList<String>();
 	
+	public static void main(String[] args) throws URISyntaxException
+	{
+		if(args.length == 2)
+		{
+			String path = args[0];
+			String newFileName = args[1];
+			localFolder = new File(path);
+			fileCount = localFolder.listFiles();
+			UMLJavaParser obj = new UMLJavaParser();
+		}
+		else
+		{
+			System.out.println("Provide all required arguments.");
+		}
 	
+	}
 }
