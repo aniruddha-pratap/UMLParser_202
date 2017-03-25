@@ -30,9 +30,9 @@ public class UMLJavaParser {
 	private static ArrayList<String> implementedInterfaces = new ArrayList<String>();
 	private static ArrayList<String> classVariables = new ArrayList<String>();
 	private static ArrayList<String> classMethods = new ArrayList<String>();
-	private static ArrayList<String>  classMethodParams= new ArrayList<String>();
-	private static ArrayList<String>  classConsrtuctors= new ArrayList<String>();
-	private static ArrayList<String>  classConsrtuctorParameters= new ArrayList<String>();
+	private static ArrayList<String> classMethodParams= new ArrayList<String>();
+	private static ArrayList<String> classConsrtuctors= new ArrayList<String>();
+	private static ArrayList<String> classConsrtuctorParameters= new ArrayList<String>();
 	public static String classes = "";
 	public static String url = "";
 	private HashMap<String,List<ClassOrInterfaceType>> mappingInterfaces = new HashMap<String,List<ClassOrInterfaceType>>();
