@@ -39,9 +39,6 @@ public class UMLJavaParser {
 	public static String url = "";
 	private HashMap<String,List<ClassOrInterfaceType>> mappingInterfaces = new HashMap<String,List<ClassOrInterfaceType>>();
 	private HashMap<String,List<ClassOrInterfaceType>> mappingParentClass = new HashMap<String,List<ClassOrInterfaceType>>();
-	private ConcurrentHashMap<String,String> mapForMultiplicity = new ConcurrentHashMap<String,String>();
-	private ConcurrentHashMap<String,String> mapForUses = new ConcurrentHashMap<String,String>();
-	private ConcurrentHashMap<String,String> mapForUses2 = new ConcurrentHashMap<String,String>();
 	ArrayList<CompilationUnit> parserCompilationUnits; 
 	
 	
