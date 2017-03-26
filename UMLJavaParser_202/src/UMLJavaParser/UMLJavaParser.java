@@ -2,6 +2,7 @@ package UMLJavaParser;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -37,6 +38,9 @@ public class UMLJavaParser {
 	public static String url = "";
 	private HashMap<String,List<ClassOrInterfaceType>> mappingInterfaces = new HashMap<String,List<ClassOrInterfaceType>>();
 	private HashMap<String,List<ClassOrInterfaceType>> mappingParentClass = new HashMap<String,List<ClassOrInterfaceType>>();
+	private ConcurrentHashMap<String,String> multiplicityMap = new ConcurrentHashMap<String,String>();
+	private ConcurrentHashMap<String,String> usesMap = new ConcurrentHashMap<String,String>();
+	private ConcurrentHashMap<String,String> usessMap = new ConcurrentHashMap<String,String>();
 	private String[] dataTypes = {"byte","short","int","long","float","double","boolean","char",
 			"Byte","Short","Integer","Long","Float","Double","Boolean","Char"};
 	
@@ -57,4 +61,6 @@ public class UMLJavaParser {
 		}
 	
 	}
+	
+	
 }
