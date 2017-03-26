@@ -1,5 +1,6 @@
 package UMLJavaParser;
 import java.io.File;
+import java.io.FileInputStream;
 import java.net.URISyntaxException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -41,8 +42,7 @@ public class UMLJavaParser {
 	private ConcurrentHashMap<String,String> mapForMultiplicity = new ConcurrentHashMap<String,String>();
 	private ConcurrentHashMap<String,String> mapForUses = new ConcurrentHashMap<String,String>();
 	private ConcurrentHashMap<String,String> mapForUses2 = new ConcurrentHashMap<String,String>();
-	private String[] dataTypes = {"byte","short","int","long","float","double","boolean","char",
-			"Byte","Short","Integer","Long","Float","Double","Boolean","Char"};
+	ArrayList<CompilationUnit> parserCompilationUnits; 
 	
 	
 	public static void main(String[] args) throws URISyntaxException
@@ -62,5 +62,23 @@ public class UMLJavaParser {
 	
 	}
 	
+	private ArrayList<CompilationUnit> getCompilationUnits(String sourcePath)
+            throws Exception {
+        File file = new File(sourcePath);
+        ArrayList<CompilationUnit> parserCompilationUnits = new ArrayList<CompilationUnit>();
+        for (final File f : file.listFiles()) {
+            if (f.isFile() && f.getName().endsWith(".java")) {
+                FileInputStream in = new FileInputStream(f);
+                CompilationUnit cu;
+                try {
+                    cu = JavaParser.parse(in);
+                    parserCompilationUnits.add(cu);
+                } finally {
+                    in.close();
+                }
+            }
+        }
+        return parserCompilationUnits;
+    }
 	
 }
