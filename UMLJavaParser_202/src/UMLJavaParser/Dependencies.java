@@ -12,6 +12,8 @@ public class Dependencies {
 
 	private String interfce="";
 	private String classes="";
+	private MethodDeclaration method;
+	private ConstructorDeclaration constructor;
 	
 	public String getinterfce() {
 		return interfce;
