@@ -1,9 +1,6 @@
 package UMLJavaParser;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -44,8 +41,6 @@ public class UMLJavaParser {
 	public boolean isClass;
 	public static MethodDeclaration methodRel;
 	public static ConstructorDeclaration cons;
-	private static HashMap<String,List<ClassOrInterfaceType>> mappingInterfaces = new HashMap<String,List<ClassOrInterfaceType>>();
-	private static HashMap<String,List<ClassOrInterfaceType>> mappingParentClass = new HashMap<String,List<ClassOrInterfaceType>>();
 	private static ConcurrentHashMap<String,String> hasRel = new ConcurrentHashMap<String,String>();
 	private static ArrayList<CompilationUnit> parserCompilationUnits; 
 	
@@ -103,7 +98,6 @@ public class UMLJavaParser {
 									URL.append(classMethods.get(i)+";");
 							}
 						}
-						List<ClassOrInterfaceType> implement = inerfaceOrClass.getImplements();
 						List<Parameter> methodP = methodRel.getParameters();
 						if(!methodP.isEmpty())
 						{
