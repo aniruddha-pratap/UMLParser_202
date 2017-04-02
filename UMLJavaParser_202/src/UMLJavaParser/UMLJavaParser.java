@@ -35,6 +35,7 @@ public class UMLJavaParser {
 	private static ArrayList<String> classMethodParams= new ArrayList<String>();
 	private static ArrayList<String> classConsrtuctors= new ArrayList<String>();
 	private static ArrayList<String> classConsrtuctorParameters= new ArrayList<String>();
+	private static StringBuilder URL = new StringBuilder();
 	public static String classes = "";
 	public static String url = "";
 	private HashMap<String,List<ClassOrInterfaceType>> mappingInterfaces = new HashMap<String,List<ClassOrInterfaceType>>();
@@ -82,7 +83,14 @@ public class UMLJavaParser {
 		try{
 			for(File file : fileCount){
 				if(file.isFile()){
-					
+					if(URL.length() > 0 && (URL.charAt(URL.length()-1) != ','))
+					{
+						URL.append(",");
+					}
+					classVariables = new ArrayList<String>();
+					classMethods = new ArrayList<String>();
+					classConsrtuctors = new ArrayList<String>();
+					URL.append("[");
 				}
 			}
 		}catch(Exception e){
