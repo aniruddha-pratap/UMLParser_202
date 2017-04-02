@@ -40,6 +40,7 @@ public class UMLJavaParser {
 	public static String classes = "";
 	public static String url = "";
 	public boolean isClass;
+	public static MethodDeclaration methodRel;
 	private static HashMap<String,List<ClassOrInterfaceType>> mappingInterfaces = new HashMap<String,List<ClassOrInterfaceType>>();
 	private static HashMap<String,List<ClassOrInterfaceType>> mappingParentClass = new HashMap<String,List<ClassOrInterfaceType>>();
 	private static ConcurrentHashMap<String,String> hasRel = new ConcurrentHashMap<String,String>();
@@ -89,11 +90,26 @@ public class UMLJavaParser {
 							isClass=false;
 						}
 						List<ClassOrInterfaceType> implement = inerfaceOrClass.getImplements();
+						List<Parameter> methodP = methodRel.getParameters();
+						if(!methodP.isEmpty())
+						{
+							for(int i=0;i<methodP.size();i++)
+							{
+								Type type = methodP.get(i).getType();
+								if(type instanceof ReferenceType && implementedInterfaces.contains(type.toString()))
+								{
+									if(!hasRel.containsKey(type))
+									{
+										hasRel.put(type.toString(),inerfaceOrClass.getName());
+									}
+								}
+							}
+						}
 					}
 				}
 			}
 		}catch(Exception e){
-			
+			System.out.println(e);
 		}
 		return img;
 	}
