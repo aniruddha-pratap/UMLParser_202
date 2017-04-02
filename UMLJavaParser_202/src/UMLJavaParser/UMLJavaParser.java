@@ -78,4 +78,16 @@ public class UMLJavaParser {
         return parserCompilationUnits;
     }
 	
+	public String parserGrammar(String img){
+		try{
+			for(File file : fileCount){
+				if(file.isFile()){
+					
+				}
+			}
+		}catch(Exception e){
+			
+		}
+		return img;
+	}
 }
