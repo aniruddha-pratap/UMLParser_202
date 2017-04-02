@@ -21,6 +21,7 @@ import com.github.javaparser.ast.body.VariableDeclaratorId;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.ReferenceType;
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.VoidType;
 
 public class UMLJavaParser {
@@ -95,6 +96,14 @@ public class UMLJavaParser {
 		}
 		return img;
 	}
+	
+	private String yUML(String javaCode) {
+        String[] lines = javaCode.split(",");
+        String[] uniqueLines = new LinkedHashSet<String>(
+                Arrays.asList(lines)).toArray(new String[0]);
+        String res = String.join(",", uniqueLines);
+        return res;
+    }
 		
 	private ArrayList<CompilationUnit> getCompilationUnits(String sourcePath)
             throws Exception {
@@ -112,6 +121,7 @@ public class UMLJavaParser {
                 }
             }
         }
+        
         return parserCompilationUnits;
     }
 	
