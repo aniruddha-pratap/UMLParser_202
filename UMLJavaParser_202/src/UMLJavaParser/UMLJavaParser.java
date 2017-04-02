@@ -40,9 +40,10 @@ public class UMLJavaParser {
 	public static String classes = "";
 	public static String url = "";
 	public boolean isClass;
-	private HashMap<String,List<ClassOrInterfaceType>> mappingInterfaces = new HashMap<String,List<ClassOrInterfaceType>>();
-	private HashMap<String,List<ClassOrInterfaceType>> mappingParentClass = new HashMap<String,List<ClassOrInterfaceType>>();
-	ArrayList<CompilationUnit> parserCompilationUnits; 
+	private static HashMap<String,List<ClassOrInterfaceType>> mappingInterfaces = new HashMap<String,List<ClassOrInterfaceType>>();
+	private static HashMap<String,List<ClassOrInterfaceType>> mappingParentClass = new HashMap<String,List<ClassOrInterfaceType>>();
+	private static ConcurrentHashMap<String,String> hasRel = new ConcurrentHashMap<String,String>();
+	private static ArrayList<CompilationUnit> parserCompilationUnits; 
 	
 	
 	public static void main(String[] args) throws URISyntaxException
@@ -105,25 +106,5 @@ public class UMLJavaParser {
         return res;
     }
 		
-	private ArrayList<CompilationUnit> getCompilationUnits(String sourcePath)
-            throws Exception {
-        File file = new File(sourcePath);
-        ArrayList<CompilationUnit> parserCompilationUnits = new ArrayList<CompilationUnit>();
-        for (final File f : file.listFiles()) {
-            if (f.isFile() && f.getName().endsWith(".java")) {
-                FileInputStream in = new FileInputStream(f);
-                CompilationUnit cu;
-                try {
-                    cu = JavaParser.parse(in);
-                    parserCompilationUnits.add(cu);
-                } finally {
-                    in.close();
-                }
-            }
-        }
-        
-        return parserCompilationUnits;
-    }
-	
-	
+		
 }
