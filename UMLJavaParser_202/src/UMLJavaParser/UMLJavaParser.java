@@ -38,6 +38,7 @@ public class UMLJavaParser {
 	private static StringBuilder URL = new StringBuilder();
 	public static String classes = "";
 	public static String url = "";
+	public boolean isClass;
 	private HashMap<String,List<ClassOrInterfaceType>> mappingInterfaces = new HashMap<String,List<ClassOrInterfaceType>>();
 	private HashMap<String,List<ClassOrInterfaceType>> mappingParentClass = new HashMap<String,List<ClassOrInterfaceType>>();
 	ArrayList<CompilationUnit> parserCompilationUnits; 
@@ -60,6 +61,41 @@ public class UMLJavaParser {
 	
 	}
 	
+	public String parserGrammar(String img){
+		try{
+			for(File file : fileCount){
+				if(file.isFile()){
+					if(URL.length() > 0 && (URL.charAt(URL.length()-1) != ','))
+					{
+						URL.append(",");
+					}
+					classVariables = new ArrayList<String>();
+					classMethods = new ArrayList<String>();
+					classConsrtuctors = new ArrayList<String>();
+					URL.append("[");
+					FileInputStream inputStream = new FileInputStream(localFolder.toString()+"/"+file.getName().split("\\.")[0]+".java");
+					CompilationUnit compUnit = JavaParser.parse(inputStream);
+					List<Node> childNodes = compUnit.getChildrenNodes();
+					for(Node child : childNodes){
+						ClassOrInterfaceDeclaration inerfaceOrClass = (ClassOrInterfaceDeclaration)child;
+						if(inerfaceOrClass.isInterface())
+						{
+							implementedInterfaces.add(inerfaceOrClass.getName());
+							URL.append("<<Interface>>;");
+							URL.append(inerfaceOrClass.getName());
+							URL.append("");
+							isClass=false;
+						}
+						List<ClassOrInterfaceType> implement = inerfaceOrClass.getImplements();
+					}
+				}
+			}
+		}catch(Exception e){
+			
+		}
+		return img;
+	}
+		
 	private ArrayList<CompilationUnit> getCompilationUnits(String sourcePath)
             throws Exception {
         File file = new File(sourcePath);
@@ -79,23 +115,5 @@ public class UMLJavaParser {
         return parserCompilationUnits;
     }
 	
-	public String parserGrammar(String img){
-		try{
-			for(File file : fileCount){
-				if(file.isFile()){
-					if(URL.length() > 0 && (URL.charAt(URL.length()-1) != ','))
-					{
-						URL.append(",");
-					}
-					classVariables = new ArrayList<String>();
-					classMethods = new ArrayList<String>();
-					classConsrtuctors = new ArrayList<String>();
-					URL.append("[");
-				}
-			}
-		}catch(Exception e){
-			
-		}
-		return img;
-	}
+	
 }
