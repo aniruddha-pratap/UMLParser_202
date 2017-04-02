@@ -1,6 +1,9 @@
 package UMLJavaParser;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -38,7 +41,6 @@ public class UMLJavaParser {
 	private static ArrayList<String> classConsrtuctorParameters= new ArrayList<String>();
 	private static StringBuilder URL = new StringBuilder();
 	public static String classes = "";
-	public static String url = "";
 	public boolean isClass;
 	public static MethodDeclaration methodRel;
 	public static ConstructorDeclaration cons;
@@ -138,13 +140,6 @@ public class UMLJavaParser {
 		return img;
 	}
 	
-	private String yUML(String javaCode) {
-        String[] lines = javaCode.split(",");
-        String[] uniqueLines = new LinkedHashSet<String>(
-                Arrays.asList(lines)).toArray(new String[0]);
-        String res = String.join(",", uniqueLines);
-        return res;
-    }
-		
-		
+	
+	
 }
