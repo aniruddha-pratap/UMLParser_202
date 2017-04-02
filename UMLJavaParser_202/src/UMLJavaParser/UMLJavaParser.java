@@ -41,6 +41,7 @@ public class UMLJavaParser {
 	public static String url = "";
 	public boolean isClass;
 	public static MethodDeclaration methodRel;
+	public static ConstructorDeclaration cons;
 	private static HashMap<String,List<ClassOrInterfaceType>> mappingInterfaces = new HashMap<String,List<ClassOrInterfaceType>>();
 	private static HashMap<String,List<ClassOrInterfaceType>> mappingParentClass = new HashMap<String,List<ClassOrInterfaceType>>();
 	private static ConcurrentHashMap<String,String> hasRel = new ConcurrentHashMap<String,String>();
@@ -89,6 +90,17 @@ public class UMLJavaParser {
 							URL.append("");
 							isClass=false;
 						}
+						if(classMethods.size() > 0)
+						{
+							URL.append("|");
+							for(int i=0 ; i<classMethods.size() ; i++)
+							{
+								if(i != classMethods.size()-1)
+									URL.append(classMethods.get(i)+";");
+								else
+									URL.append(classMethods.get(i)+";");
+							}
+						}
 						List<ClassOrInterfaceType> implement = inerfaceOrClass.getImplements();
 						List<Parameter> methodP = methodRel.getParameters();
 						if(!methodP.isEmpty())
@@ -104,7 +116,19 @@ public class UMLJavaParser {
 									}
 								}
 							}
+							
 						}
+						List<Parameter> constr = cons.getParameters();
+						if(!constr.isEmpty())
+						{
+							for(int i=0;i<constr.size();i++)
+							{
+								Type constype = constr.get(i).getType();
+								if(constype instanceof ReferenceType && implementedInterfaces.contains(constype.toString()))
+									hasRel.put(inerfaceOrClass.getName(),constype.toString());
+							}
+						}
+						
 					}
 				}
 			}
