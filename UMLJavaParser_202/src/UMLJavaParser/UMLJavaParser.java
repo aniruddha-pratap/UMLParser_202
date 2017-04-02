@@ -124,7 +124,18 @@ public class UMLJavaParser {
 									hasRel.put(inerfaceOrClass.getName(),constype.toString());
 							}
 						}
-						
+						if(!hasRel.isEmpty() && hasRel.size()>0)
+						{
+							for(String val : hasRel.keySet())
+							{
+								String s = val;
+								URL.append("[");
+								URL.append(hasRel.get(s));
+								URL.append("]uses -.->[<<interface>>;");
+								URL.append(s);
+								URL.append("],");
+							}
+						}
 					}
 				}
 			}
