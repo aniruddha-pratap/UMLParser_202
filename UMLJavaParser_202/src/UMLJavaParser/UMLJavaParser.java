@@ -67,33 +67,18 @@ public class UMLJavaParser {
 			String grammar="";
 			for(File file : fileCount){
 				if(file.isFile()){
-					if(URL.length() > 0 && (URL.charAt(URL.length()-1) != ','))
-					{
-						URL.append(",");
-					}
-					classVariables = new ArrayList<String>();
-					classMethods = new ArrayList<String>();
-					classConsrtuctors = new ArrayList<String>();
-					URL.append("[");
 					FileInputStream inputStream = new FileInputStream(localFolder.toString()+"/"+file.getName().split("\\.")[0]+".java");
 					CompilationUnit compUnit = JavaParser.parse(inputStream);
 					List<Node> childNodes = compUnit.getChildrenNodes();
-					List<TypeDeclaration> list = compUnit.getTypes();
-					Node newNode = list.get(0);
-					for (BodyDeclaration bd : ((TypeDeclaration) newNode).getMembers()) {
-						
-					}
 					for(Node child : childNodes){
-						ClassOrInterfaceDeclaration inerfaceOrClass = (ClassOrInterfaceDeclaration)child;
-						if(inerfaceOrClass.isInterface())
-						{
-							implementedInterfaces.add(inerfaceOrClass.getName());
-							URL.append("<<Interface>>;");
-							URL.append(inerfaceOrClass.getName());
-							URL.append("");
-							isClass=false;
+						ClassOrInterfaceDeclaration classOrInterface = (ClassOrInterfaceDeclaration) child;
+						if(classOrInterface.isInterface()){
+							classes = "[" + "<<interface>>";
+						}else{
+							classes = "[";
 						}
-						if(classMethods.size() > 0)
+						classes = classes + classOrInterface.getName();
+						/**if(classMethods.size() > 0)
 						{
 							URL.append("|");
 							for(int i=0 ; i<classMethods.size() ; i++)
@@ -103,7 +88,7 @@ public class UMLJavaParser {
 								else
 									URL.append(classMethods.get(i)+";");
 							}
-						}
+						}**/
 						List<Parameter> methodP = methodRel.getParameters();
 						if(!methodP.isEmpty())
 						{
@@ -114,7 +99,7 @@ public class UMLJavaParser {
 								{
 									if(!hasRel.containsKey(type))
 									{
-										hasRel.put(type.toString(),inerfaceOrClass.getName());
+										hasRel.put(type.toString(),classOrInterface.getName());
 									}
 								}
 							}
@@ -127,7 +112,7 @@ public class UMLJavaParser {
 							{
 								Type constype = constr.get(i).getType();
 								if(constype instanceof ReferenceType && implementedInterfaces.contains(constype.toString()))
-									hasRel.put(inerfaceOrClass.getName(),constype.toString());
+									hasRel.put(classOrInterface.getName(),constype.toString());
 							}
 						}
 						
