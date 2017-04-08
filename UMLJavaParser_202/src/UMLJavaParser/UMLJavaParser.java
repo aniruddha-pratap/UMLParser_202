@@ -41,7 +41,7 @@ public class UMLJavaParser {
 	public boolean isClass;
 	public static MethodDeclaration methodRel;
 	public static ConstructorDeclaration cons;
-	private static ConcurrentHashMap<String,String> hasRel = new ConcurrentHashMap<String,String>();
+	private static Map<String,String> hasRel = new HashMap<String,String>();
 	private static ArrayList<CompilationUnit> parserCompilationUnits; 
 	
 	
@@ -124,18 +124,7 @@ public class UMLJavaParser {
 									hasRel.put(inerfaceOrClass.getName(),constype.toString());
 							}
 						}
-						if(!hasRel.isEmpty() && hasRel.size()>0)
-						{
-							for(String val : hasRel.keySet())
-							{
-								String s = val;
-								URL.append("[");
-								URL.append(hasRel.get(s));
-								URL.append("]uses -.->[<<interface>>;");
-								URL.append(s);
-								URL.append("],");
-							}
-						}
+						
 					}
 				}
 			}
