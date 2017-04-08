@@ -62,8 +62,9 @@ public class UMLJavaParser {
 	
 	}
 	
-	public String parserGrammar(String img){
+	public String parserGrammar(List<CompilationUnit> jFile){
 		try{
+			String grammar="";
 			for(File file : fileCount){
 				if(file.isFile()){
 					if(URL.length() > 0 && (URL.charAt(URL.length()-1) != ','))
@@ -77,6 +78,11 @@ public class UMLJavaParser {
 					FileInputStream inputStream = new FileInputStream(localFolder.toString()+"/"+file.getName().split("\\.")[0]+".java");
 					CompilationUnit compUnit = JavaParser.parse(inputStream);
 					List<Node> childNodes = compUnit.getChildrenNodes();
+					List<TypeDeclaration> list = compUnit.getTypes();
+					Node newNode = list.get(0);
+					for (BodyDeclaration bd : ((TypeDeclaration) newNode).getMembers()) {
+						
+					}
 					for(Node child : childNodes){
 						ClassOrInterfaceDeclaration inerfaceOrClass = (ClassOrInterfaceDeclaration)child;
 						if(inerfaceOrClass.isInterface())
@@ -128,10 +134,12 @@ public class UMLJavaParser {
 					}
 				}
 			}
+			return grammar;
 		}catch(Exception e){
 			System.out.println(e);
 		}
-		return img;
+		return null;
+		
 	}
 	
 	
