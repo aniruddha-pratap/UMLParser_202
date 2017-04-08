@@ -78,44 +78,33 @@ public class UMLJavaParser {
 							classes = "[";
 						}
 						classes = classes + classOrInterface.getName();
-						/**if(classMethods.size() > 0)
-						{
-							URL.append("|");
-							for(int i=0 ; i<classMethods.size() ; i++)
+						for(BodyDeclaration body : ((TypeDeclaration) child).getMembers()){
+							List<Parameter> methodP = methodRel.getParameters();
+							if(!methodP.isEmpty())
 							{
-								if(i != classMethods.size()-1)
-									URL.append(classMethods.get(i)+";");
-								else
-									URL.append(classMethods.get(i)+";");
-							}
-						}**/
-						List<Parameter> methodP = methodRel.getParameters();
-						if(!methodP.isEmpty())
-						{
-							for(int i=0;i<methodP.size();i++)
-							{
-								Type type = methodP.get(i).getType();
-								if(type instanceof ReferenceType && implementedInterfaces.contains(type.toString()))
+								for(int i=0;i<methodP.size();i++)
 								{
-									if(!hasRel.containsKey(type))
+									Type type = methodP.get(i).getType();
+									if(type instanceof ReferenceType && implementedInterfaces.contains(type.toString()))
 									{
-										hasRel.put(type.toString(),classOrInterface.getName());
+										if(!hasRel.containsKey(type))
+										{
+											hasRel.put(type.toString(),classOrInterface.getName());
+										}
 									}
 								}
 							}
-							
-						}
-						List<Parameter> constr = cons.getParameters();
-						if(!constr.isEmpty())
-						{
-							for(int i=0;i<constr.size();i++)
+							List<Parameter> constr = cons.getParameters();
+							if(!constr.isEmpty())
 							{
-								Type constype = constr.get(i).getType();
-								if(constype instanceof ReferenceType && implementedInterfaces.contains(constype.toString()))
-									hasRel.put(classOrInterface.getName(),constype.toString());
+								for(int i=0;i<constr.size();i++)
+								{
+									Type constype = constr.get(i).getType();
+									if(constype instanceof ReferenceType && implementedInterfaces.contains(constype.toString()))
+										hasRel.put(classOrInterface.getName(),constype.toString());
+								}
 							}
 						}
-						
 					}
 				}
 			}
