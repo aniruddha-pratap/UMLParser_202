@@ -26,8 +26,6 @@ import com.github.javaparser.ast.type.VoidType;
 
 public class UMLJavaParser {
 	
-	private static String inputFile = null;
-	private static String localFilePath = null;
 	private static File localFolder = null;
 	private static File[] fileCount = null;
 	private static ArrayList<String> implementedInterfaces = new ArrayList<String>();
@@ -36,7 +34,6 @@ public class UMLJavaParser {
 	private static ArrayList<String> classMethodParams= new ArrayList<String>();
 	private static ArrayList<String> classConsrtuctors= new ArrayList<String>();
 	private static ArrayList<String> classConsrtuctorParameters= new ArrayList<String>();
-	private static StringBuilder URL = new StringBuilder();
 	public static String classes = "";
 	public boolean isClass;
 	public static MethodDeclaration methodRel;
@@ -50,7 +47,6 @@ public class UMLJavaParser {
 		if(args.length == 2)
 		{
 			String path = args[0];
-			String newFileName = args[1];
 			localFolder = new File(path);
 			fileCount = localFolder.listFiles();
 			UMLJavaParser obj = new UMLJavaParser();
@@ -83,12 +79,20 @@ public class UMLJavaParser {
 								ConstructorDeclaration constructor = (ConstructorDeclaration) body;
 								if(constructor.getDeclarationAsString().startsWith("public") && !classOrInterface.isInterface()){
 									classes = classes + "+ " + constructor.getName() + "(";
+									classConsrtuctors.add(constructor.getName().toString());
 								}
 								for(Object object : constructor.getChildrenNodes()){
 									if(object instanceof Parameter){
 										Parameter parameterType = (Parameter)object;
 										classConsrtuctorParameters.add(parameterType.getChildrenNodes().get(0).toString()); 
 										classes = classes + parameterType.getChildrenNodes().get(0).toString() + ":" + parameterType.getType().toString();									}
+								}
+							}
+							if(body instanceof MethodDeclaration){
+								MethodDeclaration method = (MethodDeclaration) body;
+								if(method.getDeclarationAsString().startsWith("public") && !classOrInterface.isInterface()){
+									classes = classes + "+ " + method.getName() + "(";
+									classMethods.add(method.getName().toString());
 								}
 							}
 							Set<String> rls = hasRel.keySet(); 
@@ -117,16 +121,6 @@ public class UMLJavaParser {
 											hasRel.put(type.toString(),classOrInterface.getName());
 										}
 									}
-								}
-							}
-							List<Parameter> constr = cons.getParameters();
-							if(!constr.isEmpty())
-							{
-								for(int i=0;i<constr.size();i++)
-								{
-									Type constype = constr.get(i).getType();
-									if(constype instanceof ReferenceType && implementedInterfaces.contains(constype.toString()))
-										hasRel.put(classOrInterface.getName(),constype.toString());
 								}
 							}
 						}
