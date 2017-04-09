@@ -93,8 +93,16 @@ public class UMLJavaParser {
 								if(method.getDeclarationAsString().startsWith("public") && !classOrInterface.isInterface()){
 									classes = classes + "+ " + method.getName() + "(";
 									classMethods.add(method.getName().toString());
+									for(Object methObj : method.getChildrenNodes()){
+										if(methObj instanceof Parameter){
+											Parameter methodType = (Parameter)methObj;
+											classMethods.add(methodType.getChildrenNodes().get(0).toString()); 
+											classes = classes + methodType.getChildrenNodes().get(0).toString() + ":" + parameterType.getType().toString();									}
+									}
+									classes = classes + ")" + method.getType();
 								}
 							}
+							classes = classes + ")";
 							Set<String> rls = hasRel.keySet(); 
 					        for (String i : rls) {
 					            String[] classArray = i.split("-");
