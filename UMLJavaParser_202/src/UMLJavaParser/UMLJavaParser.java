@@ -82,7 +82,13 @@ public class UMLJavaParser {
 							if(body instanceof ConstructorDeclaration){
 								ConstructorDeclaration constructor = (ConstructorDeclaration) body;
 								if(constructor.getDeclarationAsString().startsWith("public") && !classOrInterface.isInterface()){
-									classes += "+ " + constructor.getName() + "(";
+									classes = classes + "+ " + constructor.getName() + "(";
+								}
+								for(Object object : constructor.getChildrenNodes()){
+									if(object instanceof Parameter){
+										Parameter parameterType = (Parameter)object;
+										classConsrtuctorParameters.add(parameterType.getChildrenNodes().get(0).toString()); 
+										classes = classes + parameterType.getChildrenNodes().get(0).toString() + ":" + parameterType.getType().toString();									}
 								}
 							}
 							List<Parameter> methodP = methodRel.getParameters();
