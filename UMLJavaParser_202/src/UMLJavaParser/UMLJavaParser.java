@@ -91,13 +91,21 @@ public class UMLJavaParser {
 							if(body instanceof MethodDeclaration){
 								MethodDeclaration method = (MethodDeclaration) body;
 								if(method.getDeclarationAsString().startsWith("public") && !classOrInterface.isInterface()){
+									if (method.getName().startsWith("set")
+				                            || method.getName().startsWith("get")) {
+				                        String temp = method.getName().substring(3);
+				                    }
 									classes = classes + "+ " + method.getName() + "(";
 									classMethods.add(method.getName().toString());
 									for(Object methObj : method.getChildrenNodes()){
 										if(methObj instanceof Parameter){
 											Parameter methodType = (Parameter)methObj;
 											classMethods.add(methodType.getChildrenNodes().get(0).toString()); 
-											classes = classes + methodType.getChildrenNodes().get(0).toString() + ":" + parameterType.getType().toString();									}
+											classes = classes + methodType.getChildrenNodes().get(0).toString() + ":" + methodType.getType().toString();
+											if (hasRel.containsKey(methodType)) {
+												classes += "[" + methodType.getType() + "]";
+			                                }
+										}
 									}
 									classes = classes + ")" + method.getType();
 								}
