@@ -79,6 +79,12 @@ public class UMLJavaParser {
 						}
 						classes = classes + classOrInterface.getName();
 						for(BodyDeclaration body : ((TypeDeclaration) child).getMembers()){
+							if(body instanceof ConstructorDeclaration){
+								ConstructorDeclaration constructor = (ConstructorDeclaration) body;
+								if(constructor.getDeclarationAsString().startsWith("public") && !classOrInterface.isInterface()){
+									classes += "+ " + constructor.getName() + "(";
+								}
+							}
 							List<Parameter> methodP = methodRel.getParameters();
 							if(!methodP.isEmpty())
 							{
