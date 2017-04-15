@@ -34,16 +34,18 @@ public class SequenceDiagram {
 			for(CompilationUnit compilationUnit : compilationUnitArray){
 				StringBuilder cName = new StringBuilder();
 				List<TypeDeclaration> typeDeclarations = compilationUnit.getTypes();
-				Iterator i =typeDeclarations.listIterator();
+				Iterator<TypeDeclaration> i =typeDeclarations.listIterator();
 				while(i.hasNext()){
 					ClassOrInterfaceDeclaration classOrDeclaration = (ClassOrInterfaceDeclaration) i.next();
 					cName.append(classOrDeclaration.getName());
 					List<BodyDeclaration> bodyList = classOrDeclaration.getMembers();
-					Iterator bodyIterator = bodyList.listIterator();
+					Iterator<BodyDeclaration> bodyIterator = bodyList.listIterator();
 					while(bodyIterator.hasNext()){
 						BodyDeclaration bodyDeclaration = (BodyDeclaration) bodyIterator.next();
 						if(bodyDeclaration instanceof MethodDeclaration){
-							
+							List<MethodCallExpr> methodCallExpr = new ArrayList<MethodCallExpr>();
+							List<Node> methodDeclaration = bodyDeclaration.getChildrenNodes();
+							Iterator<Node> methodDecIterator = methodDeclaration.listIterator(); 
 						}
 					}
 				}
