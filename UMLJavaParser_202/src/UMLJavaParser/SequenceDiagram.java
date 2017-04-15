@@ -5,6 +5,7 @@ import java.util.*;
 import com.github.javaparser.*;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.*;
 
@@ -46,6 +47,22 @@ public class SequenceDiagram {
 							List<MethodCallExpr> methodCallExpr = new ArrayList<MethodCallExpr>();
 							List<Node> methodDeclaration = bodyDeclaration.getChildrenNodes();
 							Iterator<Node> methodDecIterator = methodDeclaration.listIterator(); 
+							while(methodDecIterator.hasNext()){
+								Object blockStmt = methodDecIterator.next();
+								if(blockStmt instanceof BlockStmt){
+									List<Node> expsStmt = ((Node) blockStmt).getChildrenNodes();
+									Iterator<Node> expsStmtIterator = expsStmt.listIterator();
+									while(expsStmtIterator.hasNext()){
+										Node expressionStmt  =  expsStmtIterator.next();
+										if(expressionStmt instanceof ExpressionStmt){
+											Expression expression = ((ExpressionStmt) expressionStmt).getExpression();
+											if(expression instanceof MethodCallExpr){
+												methodCallExpr.add((MethodCallExpr) expression);											
+											}
+										}
+									}
+								}
+							}
 						}
 					}
 				}
