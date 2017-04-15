@@ -13,7 +13,7 @@ public class SequenceDiagram {
 	private String path[];
 	private StringBuilder umlCode;
 	private FileInputStream inputStream;
-	private ArrayList<CompilationUnit> compilationUnit;
+	private ArrayList<CompilationUnit> compilationUnitArray;
 	
 	public SequenceDiagram(String in, String out){
 		path = new String[2];
@@ -23,12 +23,29 @@ public class SequenceDiagram {
 	
 	public void sequenceDiagram() throws Exception{
 		try{
-			compilationUnit = new ArrayList<CompilationUnit>();
+			compilationUnitArray = new ArrayList<CompilationUnit>();
 			File files = new File(path[0]);
 			for(File file: files.listFiles()){
 				if(file.isFile()){
 					inputStream = new FileInputStream(file);
-					compilationUnit.add(JavaParser.parse(inputStream));
+					compilationUnitArray.add(JavaParser.parse(inputStream));
+				}
+			}
+			for(CompilationUnit compilationUnit : compilationUnitArray){
+				StringBuilder cName = new StringBuilder();
+				List<TypeDeclaration> typeDeclarations = compilationUnit.getTypes();
+				Iterator i =typeDeclarations.listIterator();
+				while(i.hasNext()){
+					ClassOrInterfaceDeclaration classOrDeclaration = (ClassOrInterfaceDeclaration) i.next();
+					cName.append(classOrDeclaration.getName());
+					List<BodyDeclaration> bodyList = classOrDeclaration.getMembers();
+					Iterator bodyIterator = bodyList.listIterator();
+					while(bodyIterator.hasNext()){
+						BodyDeclaration bodyDeclaration = (BodyDeclaration) bodyIterator.next();
+						if(bodyDeclaration instanceof MethodDeclaration){
+							
+						}
+					}
 				}
 			}
 		}catch(Exception e){
