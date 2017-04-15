@@ -12,6 +12,7 @@ public class SequenceDiagram {
 	
 	private String path[];
 	private StringBuilder umlCode;
+	private FileInputStream inputStream;
 	private ArrayList<CompilationUnit> compilationUnit;
 	
 	public SequenceDiagram(String in, String out){
@@ -22,9 +23,18 @@ public class SequenceDiagram {
 	
 	public void sequenceDiagram() throws Exception{
 		try{
-			
+			compilationUnit = new ArrayList<CompilationUnit>();
+			File files = new File(path[0]);
+			for(File file: files.listFiles()){
+				if(file.isFile()){
+					inputStream = new FileInputStream(file);
+					compilationUnit.add(JavaParser.parse(inputStream));
+				}
+			}
 		}catch(Exception e){
 			
+		}finally{
+			inputStream.close();
 		}
 	}
 	
