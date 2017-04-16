@@ -145,6 +145,13 @@ public class UMLJavaParser {
 		
 	}
 	
+	private String splitter(String input) {
+        String[] splitArray = input.split(",");
+        String[] components = new LinkedHashSet<String>(
+                Arrays.asList(splitArray)).toArray(new String[0]);
+        String result = String.join(",", components);
+        return result;
+    }
 	
 	
 }
