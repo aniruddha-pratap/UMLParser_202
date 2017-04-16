@@ -108,6 +108,12 @@ public class UMLJavaParser {
 			                                }
 										}
 									}
+									if (hasRel.containsKey(classes)) {
+										classes += "[" + classes
+	                                            + "] uses -.->";
+	                                    String temp = "[<<interface>>;"+ classes + "]";
+	                                    temp = temp +  "[" + classes + "]";
+	                                }
 									classes = classes + ")" + method.getType();
 								}
 							}
