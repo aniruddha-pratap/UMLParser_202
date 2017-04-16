@@ -37,6 +37,7 @@ public class UMLJavaParser {
 	public static String classes = "";
 	public boolean isClass;
 	public static MethodDeclaration methodRel;
+	private FileInputStream inputStream;
 	public static ConstructorDeclaration cons;
 	private static Map<String,String> hasRel = new HashMap<String,String>();
 	private static ArrayList<CompilationUnit> parserCompilationUnits; 
@@ -111,19 +112,6 @@ public class UMLJavaParser {
 								}
 							}
 							classes = classes + ")";
-							Set<String> rls = hasRel.keySet(); 
-					        for (String i : rls) {
-					            String[] classArray = i.split("-");
-					            if (rls.getClass() != null)
-					                classes += "[<<interface>>;" + classArray[0] + "]";
-					            else
-					                classes += "[" + classArray[0] + "]";
-					            if (rls.getClass() != null)
-					                classes += "[<<interface>>;" + classArray[1] + "]";
-					            else
-					            	classes += "[" + classArray[1] + "]";
-					            classes += ",";
-					        }
 							List<Parameter> methodP = methodRel.getParameters();
 							if(!methodP.isEmpty())
 							{
