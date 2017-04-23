@@ -271,7 +271,30 @@ public class UMLJavaParser {
 			}
 		}
 		
+		/*Iterator<BodyDeclaration> methodBodyDecIterator = bodyDeclaration.iterator();
+		while(methodBodyDecIterator.hasNext()){
+			BodyDeclaration methodBodyDeclrtn = methodBodyDecIterator.next();
+			
+		}
 		
+		Iterator<BodyDeclaration> fieldBodyDecIterator = bodyDeclaration.iterator();
+		while(fieldBodyDecIterator.hasNext()){
+			BodyDeclaration fieldBodyDeclrtn = fieldBodyDecIterator.next();
+			
+		}*/
+						
+		if(!classOrInterface.getExtends().isEmpty()){
+			format += "[" + classOrInterface.getName() + "] " + "-^ " + classOrInterface.getExtends() + ",";
+		}
+
+		if(!classOrInterface.getImplements().isEmpty()){
+			List<ClassOrInterfaceType> implementedInterfaces = classOrInterface.getImplements();
+			Iterator<ClassOrInterfaceType> interfaceItrtor = implementedInterfaces.iterator();
+			while(interfaceItrtor.hasNext()){
+				ClassOrInterfaceType getIntrfc = interfaceItrtor.next();
+				format += "[" + classOrInterface.getName() + "] " + "-.-^ " + "[" + "<<interface>>;" + getIntrfc + "]" + ",";
+			}
+		}
 		
 		finalGrammarString += classOrInterfaceName;
 		
@@ -295,6 +318,15 @@ public class UMLJavaParser {
 		finalGrammarString += "]" + format;
 				
 		return finalGrammarString;
+	}
+	
+	public static void main(String args[]) throws Exception{
+		try{
+			UMLJavaParser newParser = new UMLJavaParser();
+			newParser.parserGrammar("E://Aniruddha//TestUMLParser//Test5");
+		}catch(Exception e){
+			
+		}
 	}
 	
 }
