@@ -14,8 +14,7 @@ public class ConnectyUML {
 		OutputStream outputStream = null;
 		
         try {
-            String link = "http://yuml.me/diagram/plain/class/" + passedCode
-                    + ".png";
+            String link = "https://yuml.me/diagram/plain/class/" + passedCode + ".png";
             URL connectUrl = new URL(link);
             connection = (HttpURLConnection) connectUrl.openConnection();
             connection.setRequestMethod("GET");

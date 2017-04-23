@@ -25,6 +25,11 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.VoidType;
 
 public class UMLJavaParser {
+
+	private List<CompilationUnit> compilationUnitArray = new ArrayList<CompilationUnit>();
+	private String grammarForUML = "";
+	//private Map<String, Boolean> classOrInterfaceMap = new HashMap<String, Boolean>();
+	//private Map<String, String> relationshipMap = new HashMap<String, String>();
 	
 	private static File localFolder = null;
 	private static File[] fileCount = null;
@@ -61,6 +66,14 @@ public class UMLJavaParser {
 	
 	public String parserGrammar(List<CompilationUnit> jFile){
 		try{
+			
+			String classOrInterfaceName = "";
+			List<TypeDeclaration> typeDeclarationArray;
+			Map<String, Boolean> classOrInterfaceMap = new HashMap<String, Boolean>();
+			Map<String, String> relationshipMap = new HashMap<String, String>();
+			//classOrInterfaceMap = new HashMap<String, Boolean>();
+			//compilationUnitArray = new ArrayList<CompilationUnit>();
+			
 			String grammar="";
 			for(File file : fileCount){
 				if(file.isFile()){
@@ -152,6 +165,5 @@ public class UMLJavaParser {
         String result = String.join(",", components);
         return result;
     }
-	
 	
 }
