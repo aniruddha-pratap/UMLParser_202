@@ -31,22 +31,6 @@ public class UMLJavaParser {
 	//private Map<String, Boolean> classOrInterfaceMap = new HashMap<String, Boolean>();
 	//private Map<String, String> relationshipMap = new HashMap<String, String>();
 	
-	private static File localFolder = null;
-	private static File[] fileCount = null;
-	private static ArrayList<String> implementedInterfaces = new ArrayList<String>();
-	private static ArrayList<String> classVariables = new ArrayList<String>();
-	private static ArrayList<String> classMethods = new ArrayList<String>();
-	private static ArrayList<String> classMethodParams= new ArrayList<String>();
-	private static ArrayList<String> classConsrtuctors= new ArrayList<String>();
-	private static ArrayList<String> classConsrtuctorParameters= new ArrayList<String>();
-	public static String classes = "";
-	public boolean isClass;
-	public static MethodDeclaration methodRel;
-	private FileInputStream inputStream;
-	public static ConstructorDeclaration cons;
-	private static Map<String,String> hasRel = new HashMap<String,String>();
-	private static ArrayList<CompilationUnit> parserCompilationUnits; 
-	
 	public String parserGrammar(String inputFile){
 		try{
 			
@@ -136,12 +120,38 @@ public class UMLJavaParser {
 		
 	}
 	
-	private String splitter(String input) {
-        String[] splitArray = input.split(",");
-        String[] components = new LinkedHashSet<String>(
-                Arrays.asList(splitArray)).toArray(new String[0]);
-        String result = String.join(",", components);
-        return result;
-    }
+	public String constructorOrMethodGrammar(Node typeDeclaration, ClassOrInterfaceDeclaration classOrInterface, String classOrInterfaceName,Map<String, Boolean> classOrInterfaceMap, Map<String, String> relationshipMap){
+		String format = ",";
+		String methodName = "";
+		String attributes = "";
+		String finalGrammarString = "";
+		boolean nextMember = false; 
+		boolean nextAttribute = false;
+		List<String> attributesList = new ArrayList<String>();
+		List<BodyDeclaration> bodyDeclaration = ((TypeDeclaration) typeDeclaration).getMembers();
+		
+		finalGrammarString += classOrInterfaceName;
+		
+		if(!attributes.isEmpty()){
+			String atr = attributes.toString();
+			atr = atr.replace("[", "(");
+			atr = atr.replace("]", ")");
+			atr = atr.replace("<", "(");
+			atr = atr.replace(">", ")");
+			finalGrammarString += "|" + atr;
+		}
+		
+		if(!methodName.isEmpty()){
+			methodName = methodName.replace("[", "(");
+			methodName = methodName.replace("]", ")");
+			methodName = methodName.replace("<", "(");
+			methodName = methodName.replace(">", ")");
+			finalGrammarString += "|" + methodName;
+		}
+		
+		finalGrammarString += "]" + format;
+				
+		return finalGrammarString;
+	}
 	
 }
