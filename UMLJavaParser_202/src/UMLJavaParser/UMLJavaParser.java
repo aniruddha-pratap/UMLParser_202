@@ -323,7 +323,7 @@ public class UMLJavaParser {
 	public static void main(String args[]) throws Exception{
 		try{
 			UMLJavaParser newParser = new UMLJavaParser();
-			newParser.parserGrammar("E://Aniruddha//TestUMLParser//Test5");
+			newParser.parserGrammar("E://Aniruddha//TestUMLParser//Test4");
 		}catch(Exception e){
 			
 		}
