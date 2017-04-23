@@ -82,6 +82,25 @@ public class UMLJavaParser {
 				}
 			}
 			
+			Iterator<CompilationUnit> compUntItrtr = compilationUnitArray.iterator();
+			while(compUntItrtr.hasNext()){
+				CompilationUnit compUnit = compUntItrtr.next();
+				typeDeclarationArray = compUnit.getTypes();
+				Node firstNode = typeDeclarationArray.get(0);
+				//System.out.println(firstNode);
+				ClassOrInterfaceDeclaration tempCI = (ClassOrInterfaceDeclaration) firstNode;
+				if(tempCI.isInterface()){
+					classOrInterfaceName = "[" + "<<interface>>;"; 
+				}else{
+					classOrInterfaceName = "[";
+				}
+				classOrInterfaceName +=  tempCI.getName();
+				//System.out.println(classOrInterfaceName);
+				//String className = tempCI.getName();
+				grammarForUML += constructorOrMethodGrammar(firstNode, tempCI, classOrInterfaceName, classOrInterfaceMap, relationshipMap);
+				//System.out.println(grammarForUML);
+			}
+			
 			String grammar="";
 			for(File file : fileCount){
 				if(file.isFile()){
@@ -108,34 +127,6 @@ public class UMLJavaParser {
 										Parameter parameterType = (Parameter)object;
 										classConsrtuctorParameters.add(parameterType.getChildrenNodes().get(0).toString()); 
 										classes = classes + parameterType.getChildrenNodes().get(0).toString() + ":" + parameterType.getType().toString();									}
-								}
-							}
-							if(body instanceof MethodDeclaration){
-								MethodDeclaration method = (MethodDeclaration) body;
-								if(method.getDeclarationAsString().startsWith("public") && !classOrInterface.isInterface()){
-									if (method.getName().startsWith("set")
-				                            || method.getName().startsWith("get")) {
-				                        String temp = method.getName().substring(3);
-				                    }
-									classes = classes + "+ " + method.getName() + "(";
-									classMethods.add(method.getName().toString());
-									for(Object methObj : method.getChildrenNodes()){
-										if(methObj instanceof Parameter){
-											Parameter methodType = (Parameter)methObj;
-											classMethods.add(methodType.getChildrenNodes().get(0).toString()); 
-											classes = classes + methodType.getChildrenNodes().get(0).toString() + ":" + methodType.getType().toString();
-											if (hasRel.containsKey(methodType)) {
-												classes += "[" + methodType.getType() + "]";
-			                                }
-										}
-									}
-									if (hasRel.containsKey(classes)) {
-										classes += "[" + classes
-	                                            + "] uses -.->";
-	                                    String temp = "[<<interface>>;"+ classes + "]";
-	                                    temp = temp +  "[" + classes + "]";
-	                                }
-									classes = classes + ")" + method.getType();
 								}
 							}
 							classes = classes + ")";
