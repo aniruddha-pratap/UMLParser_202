@@ -101,55 +101,34 @@ public class UMLJavaParser {
 				//System.out.println(grammarForUML);
 			}
 			
-			String grammar="";
-			for(File file : fileCount){
-				if(file.isFile()){
-					FileInputStream inputStream = new FileInputStream(localFolder.toString()+"/"+file.getName().split("\\.")[0]+".java");
-					CompilationUnit compUnit = JavaParser.parse(inputStream);
-					List<Node> childNodes = compUnit.getChildrenNodes();
-					for(Node child : childNodes){
-						ClassOrInterfaceDeclaration classOrInterface = (ClassOrInterfaceDeclaration) child;
-						if(classOrInterface.isInterface()){
-							classes = "[" + "<<interface>>";
-						}else{
-							classes = "[";
-						}
-						classes = classes + classOrInterface.getName();
-						for(BodyDeclaration body : ((TypeDeclaration) child).getMembers()){
-							if(body instanceof ConstructorDeclaration){
-								ConstructorDeclaration constructor = (ConstructorDeclaration) body;
-								if(constructor.getDeclarationAsString().startsWith("public") && !classOrInterface.isInterface()){
-									classes = classes + "+ " + constructor.getName() + "(";
-									classConsrtuctors.add(constructor.getName().toString());
-								}
-								for(Object object : constructor.getChildrenNodes()){
-									if(object instanceof Parameter){
-										Parameter parameterType = (Parameter)object;
-										classConsrtuctorParameters.add(parameterType.getChildrenNodes().get(0).toString()); 
-										classes = classes + parameterType.getChildrenNodes().get(0).toString() + ":" + parameterType.getType().toString();									}
-								}
-							}
-							classes = classes + ")";
-							List<Parameter> methodP = methodRel.getParameters();
-							if(!methodP.isEmpty())
-							{
-								for(int i=0;i<methodP.size();i++)
-								{
-									Type type = methodP.get(i).getType();
-									if(type instanceof ReferenceType && implementedInterfaces.contains(type.toString()))
-									{
-										if(!hasRel.containsKey(type))
-										{
-											hasRel.put(type.toString(),classOrInterface.getName());
-										}
-									}
-								}
-							}
-						}
-					}
+			String tempGramar = "";
+			
+			Set<String> keysFromRelMap = relationshipMap.keySet();
+			for(String key: keysFromRelMap){
+				String splitKeys[] =  key.split("-");
+				if(classOrInterfaceMap.get(splitKeys[0])){
+					tempGramar += "[<<interface>>;" + splitKeys[0] + "]";
+				}else{
+					tempGramar += "[" + splitKeys[0] + "]";
 				}
+				tempGramar += relationshipMap.get(key);
+				if(classOrInterfaceMap.get(splitKeys[1])){
+					tempGramar += "[<<interface>>;" + splitKeys[1] + "]";
+				}else{
+					tempGramar += "[" + splitKeys[1] + "]";
+				}
+				tempGramar += ",";
 			}
-			return grammar;
+			
+			grammarForUML += tempGramar;
+			
+			//System.out.println(grammarForUML);
+			String [] yUMLGrammar = grammarForUML.split(",");
+			String [] uniqueyUMLGrammarComponents = new LinkedHashSet<String>(Arrays.asList(yUMLGrammar)).toArray(new String[0]);
+			grammarForUML = String.join(",", uniqueyUMLGrammarComponents);
+			
+			//ConnectyUML.connectToYUml(grammarForUML, "E://Aniruddha//TestUMLParser//Test5" + "\\ ClassDiagram1");
+			System.out.println(grammarForUML);
 		}catch(Exception e){
 			System.out.println(e);
 		}
