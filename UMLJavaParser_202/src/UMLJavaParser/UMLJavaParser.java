@@ -130,7 +130,6 @@ public class UMLJavaParser {
 		List<String> attributesList = new ArrayList<String>();
 		List<BodyDeclaration> bodyDeclaration = ((TypeDeclaration) typeDeclaration).getMembers();
 		
-		
 		Iterator<BodyDeclaration> constBodyDecIterator = bodyDeclaration.iterator();
 		while(constBodyDecIterator.hasNext()){
 			BodyDeclaration bodyDeclrtn = constBodyDecIterator.next();
@@ -210,8 +209,69 @@ public class UMLJavaParser {
                         nextMember = true;
 					}
 				}
-			}			
+			}	
+			
+			if(bodyDeclrtn instanceof FieldDeclaration){
+				FieldDeclaration fieldDeclrtn = (FieldDeclaration) bodyDeclrtn;
+				String atrbutAccessModifier = "";
+				String bodyAccess = bodyDeclrtn.toStringWithoutComments().substring(0, bodyDeclrtn.toStringWithoutComments().indexOf(" "));
+				if(bodyAccess.equals("public")){
+					atrbutAccessModifier = "+";
+				}else if(bodyAccess.equals("private")){
+					atrbutAccessModifier = "-";
+				}else{
+					atrbutAccessModifier ="";
+				}
+				String atrbutDataType = fieldDeclrtn.getType().toString();
+				atrbutDataType = atrbutDataType.replace("[", "(");
+				atrbutDataType = atrbutDataType.replace("]", ")");
+				atrbutDataType = atrbutDataType.replace("<", "(");
+				atrbutDataType = atrbutDataType.replace(">", ")");
+				String atrbutName = fieldDeclrtn.getChildrenNodes().get(1).toString();
+				if(atrbutName.contains("=")){
+					atrbutName = atrbutName.substring(0, atrbutName.indexOf("=") - 1);
+				}
+				if(atrbutAccessModifier.equals("-") && attributesList.contains(atrbutName.toLowerCase())){
+					atrbutAccessModifier = "+";
+				}
+				String relationShip = "";
+				boolean hasMultiplicity = false;
+				if(atrbutDataType.contains("(")){
+					relationShip = atrbutDataType.substring(atrbutDataType.indexOf("(") + 1, atrbutDataType.indexOf(")"));
+					hasMultiplicity = true;
+				}else{
+					if(classOrInterfaceMap.containsKey(atrbutDataType)){
+						relationShip = atrbutDataType;
+					}
+				}
+				
+				//relationshipMap = new HashMap<String, String>();
+				if(!relationShip.isEmpty() && classOrInterfaceMap.containsKey(relationShip)){
+					String rel = "-";
+					if(relationshipMap.containsKey(relationShip + "-" + classOrInterface.getName())){
+						rel = relationshipMap.get(relationShip + "-" + classOrInterface.getName());
+						if(hasMultiplicity){
+							rel = "*" + rel;
+						}
+						relationshipMap.put(relationShip + "-" + classOrInterface.getName(), rel);
+					}else{
+						if(hasMultiplicity){
+							rel += "*";
+						}
+						relationshipMap.put(classOrInterface.getName() + "-" + relationShip, rel);
+					}
+				}
+				if(atrbutAccessModifier.equals("+") || atrbutAccessModifier.equals("-")){
+					if(nextAttribute){
+						attributes += "; ";
+					}
+					attributes += atrbutAccessModifier + " " + atrbutName + " : " + atrbutDataType;
+					nextAttribute = true;
+				}
+			}
 		}
+		
+		
 		
 		finalGrammarString += classOrInterfaceName;
 		
