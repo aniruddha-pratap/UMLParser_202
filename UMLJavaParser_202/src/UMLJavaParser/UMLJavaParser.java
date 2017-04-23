@@ -47,23 +47,6 @@ public class UMLJavaParser {
 	private static Map<String,String> hasRel = new HashMap<String,String>();
 	private static ArrayList<CompilationUnit> parserCompilationUnits; 
 	
-	
-	public static void main(String[] args) throws URISyntaxException
-	{
-		if(args.length == 2)
-		{
-			String path = args[0];
-			localFolder = new File(path);
-			fileCount = localFolder.listFiles();
-			UMLJavaParser obj = new UMLJavaParser();
-		}
-		else
-		{
-			System.out.println("Arguments missing");
-		}
-	
-	}
-	
 	public String parserGrammar(String inputFile){
 		try{
 			
@@ -83,6 +66,19 @@ public class UMLJavaParser {
 					}finally{
 						inputStream.close();
 					}
+				}
+			}
+			
+			Iterator<CompilationUnit> compilationUnitIterator = compilationUnitArray.iterator();
+			while(compilationUnitIterator.hasNext()){
+				CompilationUnit compilationUnit = compilationUnitIterator.next();
+				typeDeclarationArray = compilationUnit.getTypes();
+				Iterator<TypeDeclaration> typeDeclarationIterator = typeDeclarationArray.iterator();
+				while(typeDeclarationIterator.hasNext()){
+					TypeDeclaration typeDeclaration = typeDeclarationIterator.next();
+					ClassOrInterfaceDeclaration classOrInterface = (ClassOrInterfaceDeclaration) typeDeclaration;
+					//System.out.println(classOrInterface);
+					classOrInterfaceMap.put(classOrInterface.getName(), classOrInterface.isInterface());
 				}
 			}
 			
