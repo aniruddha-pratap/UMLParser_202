@@ -130,6 +130,89 @@ public class UMLJavaParser {
 		List<String> attributesList = new ArrayList<String>();
 		List<BodyDeclaration> bodyDeclaration = ((TypeDeclaration) typeDeclaration).getMembers();
 		
+		
+		Iterator<BodyDeclaration> constBodyDecIterator = bodyDeclaration.iterator();
+		while(constBodyDecIterator.hasNext()){
+			BodyDeclaration bodyDeclrtn = constBodyDecIterator.next();
+			if(bodyDeclrtn instanceof ConstructorDeclaration){
+				ConstructorDeclaration constructorDeclaration = (ConstructorDeclaration) bodyDeclrtn;
+				if(constructorDeclaration.getDeclarationAsString().startsWith("public") && !classOrInterface.isInterface()){
+					if(nextMember){
+						methodName += ";";
+					}
+					methodName += "+ " + constructorDeclaration.getName() + "(";
+					List<Node> constrctrChildNodes = constructorDeclaration.getChildrenNodes();
+					Iterator<Node> childNodesIterator = constrctrChildNodes.iterator();
+					while(childNodesIterator.hasNext()){
+						Node childNode = childNodesIterator.next();
+						if(childNode instanceof Parameter){
+							Parameter parameter = (Parameter) childNode;
+							methodName += parameter.getChildrenNodes().get(0).toString() + ":" + parameter.getType().toString(); 
+							if(classOrInterfaceMap.containsKey(parameter.getType().toString()) && !classOrInterfaceMap.get(classOrInterface.getName())){
+								format += "[" + classOrInterface.getName() + "] uses -.->";
+								if(classOrInterfaceMap.get(parameter.getType().toString())){
+									format += "[<<interface>>;" + parameter.getType().toString() + "]";
+								}else{
+									format += "[" + parameter.getType().toString() + "]";
+								}
+							}
+							format += ",";
+						}
+					}
+					methodName += ")";
+	                nextMember = true;
+				}
+			}
+			
+			if(bodyDeclrtn instanceof MethodDeclaration){
+				MethodDeclaration methodDeclaration = (MethodDeclaration) bodyDeclrtn;
+				if(methodDeclaration.getDeclarationAsString().startsWith("public") && !classOrInterface.isInterface()){
+					if(methodDeclaration.getName().startsWith("set") || methodDeclaration.getName().startsWith("get")){
+						attributesList.add(methodDeclaration.getName().substring(3).toLowerCase());
+					}else{
+						if(nextMember){
+							methodName += ";";
+						}
+						methodName += "+ " + methodDeclaration.getName() + "(";
+						List<Node> methodChildNodes = methodDeclaration.getChildrenNodes();
+						Iterator<Node> methodChildNodesIterator = methodChildNodes.iterator();
+						while(methodChildNodesIterator.hasNext()){
+							Node methodChildNode = methodChildNodesIterator.next();
+							if(methodChildNode instanceof Parameter){
+								Parameter mParameter = (Parameter) methodChildNode;
+								methodName += mParameter.getChildrenNodes().get(0).toString() + ":" + mParameter.getType().toString();
+								if(classOrInterfaceMap.containsKey(mParameter.getType().toString()) && !classOrInterfaceMap.get(classOrInterface.getName())){
+									format += "[" + classOrInterface.getName() + "] uses -.->";
+									if(classOrInterfaceMap.get(mParameter.getType().toString())){
+										format += "[<<interface>>;" + mParameter.getType().toString() + "]";
+									}else{
+										format += "[" + mParameter.getType().toString() + "]";
+									}
+								}
+								format += ",";
+							}else{
+								String methodImplArray[] = methodChildNode.toString().split(" ");
+								for (int i=0;i<methodImplArray.length;i++) {
+									if(classOrInterfaceMap.containsKey(methodImplArray[i]) && !classOrInterfaceMap.get(classOrInterface.getName())){
+										format += "[" + classOrInterface.getName() + "] uses -.->";
+										if (classOrInterfaceMap.get(methodImplArray[i])){
+                                        	format += "[<<interface>>;" + methodImplArray[i] + "]";
+                                        }
+                                        else{
+                                            format += "[" + methodImplArray[i] + "]";	
+                                        }
+										format += ",";
+									}
+								}
+							}
+						}
+						methodName += ") : " + methodDeclaration.getType();
+                        nextMember = true;
+					}
+				}
+			}			
+		}
+		
 		finalGrammarString += classOrInterfaceName;
 		
 		if(!attributes.isEmpty()){
