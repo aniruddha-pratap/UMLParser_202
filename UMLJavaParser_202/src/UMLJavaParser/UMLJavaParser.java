@@ -64,7 +64,7 @@ public class UMLJavaParser {
 	
 	}
 	
-	public String parserGrammar(List<CompilationUnit> jFile){
+	public String parserGrammar(String inputFile){
 		try{
 			
 			String classOrInterfaceName = "";
@@ -73,6 +73,18 @@ public class UMLJavaParser {
 			Map<String, String> relationshipMap = new HashMap<String, String>();
 			//classOrInterfaceMap = new HashMap<String, Boolean>();
 			//compilationUnitArray = new ArrayList<CompilationUnit>();
+			
+			File folder = new File(inputFile);
+			for(File file: folder.listFiles()){
+				if(file.isFile()){
+					FileInputStream inputStream = new FileInputStream(file);
+					try{
+						compilationUnitArray.add(JavaParser.parse(inputStream));
+					}finally{
+						inputStream.close();
+					}
+				}
+			}
 			
 			String grammar="";
 			for(File file : fileCount){
