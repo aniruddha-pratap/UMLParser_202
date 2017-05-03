@@ -28,10 +28,11 @@ public class UMLJavaParser {
 
 	private List<CompilationUnit> compilationUnitArray = new ArrayList<CompilationUnit>();
 	private String grammarForUML = "";
+	private ConnectyUML connectToYUml;
 	//private Map<String, Boolean> classOrInterfaceMap = new HashMap<String, Boolean>();
 	//private Map<String, String> relationshipMap = new HashMap<String, String>();
 	
-	public String parserGrammar(String inputFile){
+	public String parserGrammar(String inputFile, String outputName) throws Exception{
 		try{
 			
 			String classOrInterfaceName = "";
@@ -43,7 +44,7 @@ public class UMLJavaParser {
 			
 			File folder = new File(inputFile);
 			for(File file: folder.listFiles()){
-				if(file.isFile()){
+				if(file.isFile() && file.getName().endsWith(".java")){
 					FileInputStream inputStream = new FileInputStream(file);
 					try{
 						compilationUnitArray.add(JavaParser.parse(inputStream));
@@ -110,8 +111,8 @@ public class UMLJavaParser {
 			String [] yUMLGrammar = grammarForUML.split(",");
 			String [] uniqueyUMLGrammarComponents = new LinkedHashSet<String>(Arrays.asList(yUMLGrammar)).toArray(new String[0]);
 			grammarForUML = String.join(",", uniqueyUMLGrammarComponents);
-			
-			//ConnectyUML.connectToYUml(grammarForUML, "E://Aniruddha//TestUMLParser//Test5" + "\\ ClassDiagram1");
+			connectToYUml= new ConnectyUML();
+			connectToYUml.connectToYUml(grammarForUML, outputName);
 			System.out.println(grammarForUML);
 		}catch(Exception e){
 			System.out.println(e);
@@ -223,7 +224,8 @@ public class UMLJavaParser {
 					atrbutAccessModifier ="";
 				}
 				String atrbutDataType = fieldDeclrtn.getType().toString();
-				atrbutDataType = atrbutDataType.replace("[", "(");
+				System.out.println("Data type"+atrbutDataType);
+				atrbutDataType = atrbutDataType.replace("[", "(*");
 				atrbutDataType = atrbutDataType.replace("]", ")");
 				atrbutDataType = atrbutDataType.replace("<", "(");
 				atrbutDataType = atrbutDataType.replace(">", ")");
@@ -262,11 +264,17 @@ public class UMLJavaParser {
 					}
 				}
 				if(atrbutAccessModifier.equals("+") || atrbutAccessModifier.equals("-")){
-					if(nextAttribute){
-						attributes += "; ";
-					}
-					attributes += atrbutAccessModifier + " " + atrbutName + " : " + atrbutDataType;
-					nextAttribute = true;
+					if(atrbutDataType.contains("Collection") || (atrbutDataType.length() == 1)){
+						atrbutAccessModifier = "";
+						atrbutName = "";
+						atrbutDataType = "";
+					}else{
+						if(nextAttribute){
+							attributes += "; ";
+						}
+						attributes += atrbutAccessModifier + " " + atrbutName + " : " + atrbutDataType;
+						nextAttribute = true;
+						}
 				}
 			}
 		}
@@ -298,13 +306,18 @@ public class UMLJavaParser {
 		
 		finalGrammarString += classOrInterfaceName;
 		
+		
+		
 		if(!attributes.isEmpty()){
 			String atr = attributes.toString();
-			atr = atr.replace("[", "(");
+			atr = atr.replace("[", "(*");
 			atr = atr.replace("]", ")");
 			atr = atr.replace("<", "(");
 			atr = atr.replace(">", ")");
 			finalGrammarString += "|" + atr;
+		}else{
+			if(!classOrInterface.isInterface() && !methodName.isEmpty())
+				finalGrammarString += "|";
 		}
 		
 		if(!methodName.isEmpty()){
@@ -313,6 +326,9 @@ public class UMLJavaParser {
 			methodName = methodName.replace("<", "(");
 			methodName = methodName.replace(">", ")");
 			finalGrammarString += "|" + methodName;
+		}else{
+			if(!classOrInterface.isInterface() && !attributes.isEmpty())
+				finalGrammarString += "|";
 		}
 		
 		finalGrammarString += "]" + format;
@@ -323,7 +339,7 @@ public class UMLJavaParser {
 	public static void main(String args[]) throws Exception{
 		try{
 			UMLJavaParser newParser = new UMLJavaParser();
-			newParser.parserGrammar("E://Aniruddha//TestUMLParser//Test4");
+			newParser.parserGrammar(args[0], args[1]);
 		}catch(Exception e){
 			
 		}
