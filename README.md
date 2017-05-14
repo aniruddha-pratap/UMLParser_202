@@ -14,5 +14,10 @@ Steps to run
 Please find below he steps to run the project.
 
 1. Run the below command to generate uml diagram
+
 java -jar UMLParser@202.jar TestUMLParser\Test1 aniruddheTestCase1
-where UMLParser@202.jar is the name of the jar file. “TestUMLParser\Test1” is the folder name for the files for test case “aniruddhTestCase1” is the name of the output image which is generated in the same folder as input file folder .
+
+where 
+UMLParser@202.jar is the name of the jar file. 
+“TestUMLParser\Test1” is the folder name for the files for test case 
+“aniruddhTestCase1” is the name of the output image which is generated in the same folder as input file folder .
